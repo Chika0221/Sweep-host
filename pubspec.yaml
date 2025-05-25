@@ -34,6 +34,38 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  hooks_riverpod: ^2.6.1
+  flutter_hooks: ^0.21.2
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+  # Firebase接続
+  firebase_core: ^3.13.0
+  # Firebase_authを使えるようにする
+  firebase_auth: ^5.5.3
+  # Googleでのサインイン
+  google_sign_in: ^6.3.0
+  # マップ表示
+  flutter_map: ^8.1.1
+  # 緯度経度を１つの値で管理
+  latlong2: ^0.9.1
+  # 現在地取得
+  location: ^8.0.0
+  # マップ移動にアニメーションを付ける
+  flutter_map_animations: ^0.9.0
+  # サインインボタン
+  sign_button: ^2.0.6
+  # 環境変数
+  flutter_dotenv: ^5.2.1
+  # firestore
+  cloud_firestore: ^5.6.8
+  # firebaseStorage
+  firebase_storage: ^12.4.6
+  # UUID生成
+  uuid: ^4.5.1
+  # 波型
+  wave: ^0.2.2
+  # SVG表示
+  flutter_svg: ^2.1.0
 
 dev_dependencies:
   flutter_test:
