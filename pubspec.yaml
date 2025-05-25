@@ -89,6 +89,36 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+
+  assets:
+    - assets/images/markers/trash.svg
+    - assets/images/markers/trashCan.svg
+    - assets/images/coin.png
+    - assets/icons/
+    # - assets/fonts
+
+  fonts:
+    - family: Zen_Maru_Gothic
+      fonts:
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Light.ttf
+          weight: 100
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Light.ttf
+          weight: 200
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Bold.ttf
+          weight: 800
+        - asset: assets/fonts/Zen_Maru_Gothic/ZenMaruGothic-Black.ttf
+          weight: 900
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
