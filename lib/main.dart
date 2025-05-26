@@ -12,7 +12,10 @@ class MyApp extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false, 
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.dark,
+      // darkTheme: ThemeData.dark(),
+      theme: ThemeData(colorSchemeSeed: Colors.blue),
       home: MainPage(),
     );
   }
