@@ -1,13 +1,17 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// Package imports:
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+// Project imports:
 import 'package:sweep_host/logo/sweep_logo.dart';
 import 'package:sweep_host/pages/analytics_page.dart';
 import 'package:sweep_host/pages/dashboard_page.dart';
 import 'package:sweep_host/pages/history_page.dart';
-import 'package:sweep_host/pages/map_page.dart';
+import 'package:sweep_host/pages/map_page/map_page.dart';
 import 'package:sweep_host/widgets/setting_navigation_trailing.dart';
-import 'package:sweep_host/widgets/wave_frame.dart';
 
 class MainPage extends HookConsumerWidget {
   const MainPage({super.key});
