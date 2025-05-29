@@ -9,7 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweep_host/logo/sweep_logo.dart';
 import 'package:sweep_host/pages/analytics_page.dart';
 import 'package:sweep_host/pages/dashboard_page.dart';
-import 'package:sweep_host/pages/history_page.dart';
+import 'package:sweep_host/pages/history_page/history_page.dart';
 import 'package:sweep_host/pages/map_page/map_page.dart';
 import 'package:sweep_host/widgets/setting_navigation_trailing.dart';
 
