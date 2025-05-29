@@ -8,7 +8,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweep_host/pages/main_page.dart';
 
 void main() {
-  runApp(MyApp());
+  final app = MyApp();
+  final providerScope = ProviderScope(child: app);
+  runApp(providerScope);
 }
 
 class MyApp extends HookConsumerWidget {
