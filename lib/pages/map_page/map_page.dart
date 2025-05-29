@@ -10,8 +10,11 @@ import 'package:latlong2/latlong.dart';
 
 // Project imports:
 import 'package:sweep_host/pages/map_page/home_position_container.dart';
+import 'package:sweep_host/pages/map_page/trash_maker_child.dart';
+import 'package:sweep_host/states/post_stream_provider.dart';
+import 'package:sweep_host/widgets/post_item.dart';
 
-// 大津市役所の緯度経度 TODO: 後で消す 
+// 大津市役所の緯度経度 TODO: 後で消す home positionにする
 const otsuCityOfficePosition = LatLng(35.01834366232745, 135.85460273093318);
 
 class MapPage extends StatefulHookConsumerWidget {
@@ -34,6 +37,8 @@ class _MapPageState extends ConsumerState<MapPage>
 
   @override
   Widget build(BuildContext context) {
+    final postData = ref.watch(postStreamProvider);
+
     return FlutterMap(
       mapController: animatedMapController.mapController,
       options: MapOptions(
@@ -47,46 +52,43 @@ class _MapPageState extends ConsumerState<MapPage>
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         ),
-    
-        // postData.when(
-        //   data: (data) {
-        //     return MarkerLayer(
-        //       markers: List.generate(data.length, (index) {
-        //         final post = data[index];
-        //         return Marker(
-        //           point: post.location,
-        //           width: 50,
-        //           height: 50,
-        //           alignment: Alignment.center,
-        //           rotate: true,
-        //           child: GestureDetector(
-        //             onTapDown: (details) {
-        //               showDialog(
-        //                 context: context,
-        //                 builder: (context) {
-        //                   return AlertDialog(
-        //                     title: Text(post.comment),
-        //                     content: Image.network(post.imagePaths[0]),
-        //                   );
-        //                 },
-        //               );
-        //             },
-        //             child: TrashMakerChild(type: post.type),
-        //           ),
-        //         );
-        //       }),
-        //     );
-        //   },
-        //   error: (error, stackTrace) => Center(child: Text(error.toString())),
-        //   loading: () {
-        //     return Positioned(
-        //       left: 16,
-        //       top: 16,
-        //       child: CircularProgressIndicator(),
-        //     );
-        //   },
-        // ),
-    
+
+        postData.when(
+          data: (data) {
+            return MarkerLayer(
+              markers: List.generate(data.length, (index) {
+                final post = data[index];
+                return Marker(
+                  point: post.location,
+                  width: 50,
+                  height: 50,
+                  alignment: Alignment.center,
+                  rotate: true,
+                  child: GestureDetector(
+                    onTapDown: (details) {
+                      print(post.imagePaths.first);
+                      showDialog(
+                        context: context,
+                        builder:
+                            (context) => Dialog(child: PostItem(post: post)),
+                      );
+                    },
+                    child: TrashMakerChild(type: post.type),
+                  ),
+                );
+              }),
+            );
+          },
+          error: (error, stackTrace) => Center(child: Text(error.toString())),
+          loading: () {
+            return Positioned(
+              left: 16,
+              top: 16,
+              child: CircularProgressIndicator(),
+            );
+          },
+        ),
+
         // 役所ピン
         MarkerLayer(
           markers: [
@@ -96,7 +98,7 @@ class _MapPageState extends ConsumerState<MapPage>
             ),
           ],
         ),
-    
+
         // 現在地ボタンと + - ボタン
         Positioned(
           bottom: 8,
@@ -116,14 +118,13 @@ class _MapPageState extends ConsumerState<MapPage>
                       icon: Icon(Icons.add),
                     ),
                     IconButton.filledTonal(
-                      onPressed:
-                          () => animatedMapController.animatedZoomOut(),
+                      onPressed: () => animatedMapController.animatedZoomOut(),
                       icon: Icon(Icons.remove),
                     ),
                   ],
                 ),
               ),
-    
+
               FloatingActionButton(
                 shape: CircleBorder(),
                 onPressed: () {
@@ -133,7 +134,7 @@ class _MapPageState extends ConsumerState<MapPage>
                     curve: Curves.easeIn,
                   );
                 },
-                child: const Icon(Icons.home_rounded),
+                child: const Icon(Icons.home_rounded, color: Colors.white),
               ),
             ],
           ),

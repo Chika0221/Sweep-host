@@ -11,7 +11,7 @@ import 'package:sweep_host/pages/main_page.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform
   );
 
   final app = MyApp();
@@ -26,8 +26,8 @@ class MyApp extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.dark,
-      // darkTheme: ThemeData.dark(),
       theme: ThemeData(colorSchemeSeed: Colors.blue),
       home: MainPage(),
     );
