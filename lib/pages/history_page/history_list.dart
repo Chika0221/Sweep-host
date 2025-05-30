@@ -41,6 +41,7 @@ class HistoryList extends HookConsumerWidget {
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
               ),
               height: 75,
+              child: Center(child: Text("投稿")),
             ),
             Expanded(
               child: postData.when(

@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
+import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
 
 // Project imports:
+import 'package:sweep_host/classes/post.dart';
 import 'package:sweep_host/pages/map_page/home_position_container.dart';
 import 'package:sweep_host/pages/map_page/trash_maker_child.dart';
 import 'package:sweep_host/states/post_stream_provider.dart';
@@ -38,6 +40,7 @@ class _MapPageState extends ConsumerState<MapPage>
   @override
   Widget build(BuildContext context) {
     final postData = ref.watch(postStreamProvider);
+    final heatmapToggle = useState(false);
 
     return FlutterMap(
       mapController: animatedMapController.mapController,
@@ -53,41 +56,41 @@ class _MapPageState extends ConsumerState<MapPage>
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         ),
 
-        postData.when(
-          data: (data) {
-            return MarkerLayer(
-              markers: List.generate(data.length, (index) {
-                final post = data[index];
-                return Marker(
-                  point: post.location,
-                  width: 50,
-                  height: 50,
-                  alignment: Alignment.center,
-                  rotate: true,
-                  child: GestureDetector(
-                    onTapDown: (details) {
-                      print(post.imagePaths.first);
-                      showDialog(
-                        context: context,
-                        builder:
-                            (context) => Dialog(child: PostItem(post: post)),
-                      );
-                    },
-                    child: TrashMakerChild(type: post.type),
-                  ),
-                );
-              }),
-            );
-          },
-          error: (error, stackTrace) => Center(child: Text(error.toString())),
-          loading: () {
-            return Positioned(
-              left: 16,
-              top: 16,
-              child: CircularProgressIndicator(),
-            );
-          },
-        ),
+        if (!heatmapToggle.value)
+          postData.when(
+            data: (data) {
+              return MarkerLayer(
+                markers: List.generate(data.length, (index) {
+                  final post = data[index];
+                  return Marker(
+                    point: post.location,
+                    width: 50,
+                    height: 50,
+                    alignment: Alignment.center,
+                    rotate: true,
+                    child: GestureDetector(
+                      onTapDown: (details) {
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => Dialog(child: PostItem(post: post)),
+                        );
+                      },
+                      child: TrashMakerChild(type: post.type),
+                    ),
+                  );
+                }),
+              );
+            },
+            error: (error, stackTrace) => Center(child: Text(error.toString())),
+            loading: () {
+              return Positioned(
+                left: 16,
+                top: 16,
+                child: CircularProgressIndicator(),
+              );
+            },
+          ),
 
         // 役所ピン
         MarkerLayer(
@@ -97,6 +100,52 @@ class _MapPageState extends ConsumerState<MapPage>
               child: HomePositionContainer(),
             ),
           ],
+        ),
+
+        // ヒートマップ
+        if (heatmapToggle.value)
+          postData.when(
+            data: (data) {
+              final heatMapData =
+                  data
+                      .where((e) => e.type == PostType.trash)
+                      .map((e) => WeightedLatLng(e!.location, 25))
+                      .toList();
+
+              return Container(
+                color: Colors.black.withAlpha(100),
+                child: HeatMapLayer(
+                  heatMapDataSource: InMemoryHeatMapDataSource(
+                    data: heatMapData,
+                  ),
+                  heatMapOptions: HeatMapOptions(
+                    gradient: HeatMapOptions.defaultGradient,
+                  ),
+                ),
+              );
+            },
+            error: (error, stackTrace) {
+              return Ink(
+                color: Colors.black.withAlpha(100),
+                child: Center(child: Text("データエラー")),
+              );
+            },
+            loading: () {
+              return Ink(
+                color: Colors.black.withAlpha(100),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            },
+          ),
+        Positioned(
+          bottom: 8,
+          left: 8,
+          child: FloatingActionButton.extended(
+            onPressed: () {
+              heatmapToggle.value = !heatmapToggle.value;
+            },
+            label: Text("ヒートマップ表示"),
+          ),
         ),
 
         // 現在地ボタンと + - ボタン
