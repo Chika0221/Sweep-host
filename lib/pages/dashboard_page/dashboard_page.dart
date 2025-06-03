@@ -12,17 +12,31 @@ class DashboardPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
-      child: Column(
+      child: Row(
         children: [
-          Flexible(flex: 2, child: Container()),
-          Flexible(
-            flex: 3,
-            child: LineChartSample4(
-              mainLineColor: Colors.blue,
-              belowLineColor: Colors.blue.withAlpha(100),
-              aboveLineColor: Colors.grey.withAlpha(100),
+          Expanded(
+            child: Column(
+              children: [
+                Flexible(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30),
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                    ),
+                    margin: EdgeInsets.all(16),
+                  ),
+                ),
+                Flexible(
+                  child: LineChartSample4(
+                    mainLineColor: Colors.blue,
+                    belowLineColor: Colors.blue.withAlpha(100),
+                    aboveLineColor: Colors.grey.withAlpha(100),
+                  ),
+                ),
+              ],
             ),
           ),
+          SizedBox(width: 300, child: Container(color: Colors.red)),
         ],
       ),
     );

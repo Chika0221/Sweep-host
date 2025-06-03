@@ -18,6 +18,7 @@ class MainPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final navigationSelected = useState(0);
+    final navigationOpen = useState(false);
 
     return Scaffold(
       body: Row(
@@ -29,8 +30,18 @@ class MainPage extends HookConsumerWidget {
               navigationSelected.value = value;
             },
             labelType: NavigationRailLabelType.none,
-            extended: true,
-            leading: SweepLogo(),
+            extended: navigationOpen.value,
+            leading: Column(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    navigationOpen.value = !navigationOpen.value;
+                  },
+                  icon: Icon(Icons.menu_rounded),
+                ),
+                SweepLogo(),
+              ],
+            ),
             destinations: [
               NavigationRailDestination(
                 icon: Icon(Icons.dashboard_rounded),

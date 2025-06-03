@@ -181,6 +181,7 @@ class _MapPageState extends ConsumerState<MapPage>
                     dest: otsuCityOfficePosition,
                     duration: Duration(milliseconds: 500),
                     curve: Curves.easeIn,
+                    zoom: 12,
                   );
                 },
                 child: const Icon(Icons.home_rounded, color: Colors.white),
