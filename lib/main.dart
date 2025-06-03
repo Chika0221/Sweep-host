@@ -10,9 +10,7 @@ import 'package:sweep_host/firebase_options.dart';
 import 'package:sweep_host/pages/main_page.dart';
 
 Future<void> main() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   final app = MyApp();
   final providerScope = ProviderScope(child: app);
@@ -27,7 +25,7 @@ class MyApp extends HookConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       theme: ThemeData(colorSchemeSeed: Colors.blue),
       home: MainPage(),
     );

@@ -14,7 +14,7 @@ class DashboardPage extends HookConsumerWidget {
     return Expanded(
       child: Column(
         children: [
-          Flexible(flex: 2, child: Container(color: Colors.amber)),
+          Flexible(flex: 2, child: Container()),
           Flexible(
             flex: 3,
             child: LineChartSample4(
