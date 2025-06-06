@@ -26,7 +26,10 @@ class MyApp extends HookConsumerWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.system,
-      theme: ThemeData(colorSchemeSeed: Colors.blue),
+      theme: ThemeData(
+        colorSchemeSeed: Colors.blue.shade600,
+        fontFamily: "Zen_Maru_Gothic",
+      ),
       home: MainPage(),
     );
   }

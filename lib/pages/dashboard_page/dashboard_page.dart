@@ -6,6 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Project imports:
 import 'package:sweep_host/pages/dashboard_page/line_shart.dart';
+import 'package:sweep_host/pages/dashboard_page/submit_trashbox.dart';
+import 'package:sweep_host/pages/dashboard_page/trashbox_state_list_view.dart';
 
 class DashboardPage extends HookConsumerWidget {
   const DashboardPage({super.key});
@@ -36,7 +38,20 @@ class DashboardPage extends HookConsumerWidget {
               ],
             ),
           ),
-          SizedBox(width: 300, child: Container(color: Colors.red)),
+          VerticalDivider(indent: 16, endIndent: 16),
+          SizedBox(
+            width: 300,
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: TrashboxStateListView()),
+                  SubmitTrashboxButton(),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
