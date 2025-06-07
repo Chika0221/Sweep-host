@@ -1,73 +1,74 @@
-# sweep_host
+# Sweep
 
-A Flutter application designed to support and manage cleaning activities. (プロジェクトの目的をより具体的に記述してください)
+住民参加型ゴミ拾いアプリとスマートゴミ箱で、街のポイ捨て問題を解決するプロジェクトです。主な目的はHOSTへのゴミの落ちている地点の可視化。それによりゴミの回収の最適化することにあります。
 
-## 主な機能
+## 概要
 
-*   **マップ表示**: ごみの場所や清掃活動の範囲を地図上に表示します。 (`lib/pages/map_page`)
-*   **投稿機能**: 清掃活動の報告やごみの情報を投稿できます。 (`lib/classes/post.dart`, `lib/widgets/post_item.dart`)
-*   **履歴表示**: 過去の清掃活動の履歴を確認できます。 (`lib/pages/history_page`)
-*   **分析機能**: 清掃活動のデータを分析し、可視化します。 (`lib/pages/analytics_page.dart`)
-*   **ユーザープロファイル**: ユーザー情報を管理します。 (`lib/classes/profile.dart`)
+「Sweep」は、スマートフォンアプリとスマートゴミ箱「SwapBox」を連携させることで、市民が参加しやすく、継続しやすい新しいゴミ拾いの形を提案するプロジェクトです。 大津市のポイ捨て問題という社会課題を、テクノロジーの力で解決することを目指しています。
 
-## 使用技術
+## 背景
 
-*   **Flutter**: UIツールキット
-*   **Firebase**: バックエンドサービス (認証、データベース、ストレージなど)
-*   **Riverpod**: 状態管理
-*   **flutter_map**: 地図表示ライブラリ
-*   **freezed**: イミュータブルなクラス生成
-*   **hooks_riverpod**: Riverpod と Flutter Hooks の連携
+大津市では、ポイ捨てによるごみが問題となっています。 調査によると、清掃活動に参加したくても「参加方法がわからない」「一人では参加しづらい」「忙しくて時間がない」といった理由で、参加できていない人が多くいることがわかっています。 また、「近くにゴミ箱がない」「ポイ捨てに対する意識が低い」といった点も、ポイ捨ての原因として挙げられています。
 
-## Getting Started
+これらの課題を解決するため、私たちは楽しみながらゴミ拾いに参加できる仕組みとして、住民参加型ゴミ拾いアプリ「Sweep」とスマートゴミ箱「SwapBox」を開発しました。
 
-This project is a starting point for a Flutter application.
+## 機能
 
-A few resources to get you started if this is your first Flutter project:
+### スマートフォンアプリ「Sweep」
+[Sweepのリポジトリはこちら](https://github.com/Chika0221/Sweep)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+「Sweep」は、ゴミ拾いをより楽しく、身近にするためのアプリケーションです。
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+| 機能 | 説明 |
+| :--- | :--- |
+| **ユーザー認証** | GoogleまたはAppleアカウントで簡単にログインできます。 |
+| **ゴミ情報の投稿** | ゴミを見つけたら、写真とコメントを付けて、その場所を投稿できます。 |
+| **マップ機能** | 投稿されたゴミの位置や、ゴミ箱の設置場所を地図上で確認できます。 |
+| **タイムライン** | 他のユーザーの投稿をリアルタイムで見ることができます。 |
+| **ポイントシステム** | ゴミ拾いやゴミ箱の利用でポイントが貯まります。 |
+| **ポイント交換** | 貯まったポイントは、地域の魅力が詰まったオリジナルキーホルダーと交換できます。 |
 
-## プロジェクト構造 (概要)
+### PC向けのWEBアプリ 「Sweep-Host」
+**このリポジトリです。**
 
-```
-sweep_host/
-├── android/            # Android固有のコード
-├── assets/             # 画像、フォントなどの静的ファイル
-│   ├── fonts/
-│   └── images/
-├── ios/                # iOS固有のコード
-├── lib/                # Dartのソースコード
-│   ├── classes/        # データモデル (Post, Profile, Hostなど)
-│   ├── firebase_options.dart # Firebase設定
-│   ├── main.dart       # アプリケーションのエントリーポイント
-│   ├── pages/          # 各ページのUIとロジック
-│   │   ├── analytics_page.dart
-│   │   ├── dashboard_page/
-│   │   ├── history_page/
-│   │   └── map_page/
-│   ├── states/         # Riverpodプロバイダーなどの状態管理関連
-│   └── widgets/        # 再利用可能なUIコンポーネント
-├── test/               # テストコード
-├── web/                # Web固有のコード (Flutter Webの場合)
-├── pubspec.yaml        # プロジェクトの依存関係とメタデータ
-└── README.md           # このファイル
-```
+「Sweep-Host」は**Sweep**で収集したでデータをホスト側にグラフや表などで提供するWEBアプリです。
 
-## セットアップと実行
+| 機能 | 説明 |
+| :--- | :--- |
+| **ユーザー認証** | メールアドレスを用いてHOSTアカウントを作成 |
+| **ゴミ情報の投稿の閲覧** | 投稿ユーザーや正確な投稿時間などユーザーでは取得できない情報を取得可能
+| **マップ機能** | 投稿されたゴミの位置や、ゴミ箱の設置場所を地図上で確認できます。またゴミの分布をヒートマップで表示 |
 
-1.  Flutter SDK がインストールされていることを確認してください。
-2.  依存関係をインストールします:
-    ```bash
-    flutter pub get
-    ```
-3.  アプリケーションを実行します:
-    ```bash
-    flutter run
-    ```
 
-(必要に応じて、Firebaseプロジェクトのセットアップ手順などを追記してください)
+
+### スマートゴミ箱「SwapBox」
+
+「SwapBox」は、IoT技術を活用したスマートなゴミ箱です。
+
+* **ゴミの重量測定:** センサーがゴミの重さを自動で測定します。
+* **QRコード連携:** アプリのQRコードをかざすことで、ユーザーを認識し、ポイントを付与します。
+* **データ送信:** 収集したデータ（ユーザー情報、ゴミの重量）は、自動でFirebaseに送信されます。
+
+## 技術スタック
+
+### アプリケーション
+
+| 技術 | 目的 |
+| :--- | :--- |
+| **Flutter** | iOS/Androidのクロスプラットフォーム開発を高速に行うために採用しました。 |
+| **Firebase** | データベース、画像ストレージ、ユーザー認証など、バックエンド機能全般で活用しています。 |
+
+### スマートゴミ箱
+
+| 技術 | 目的 |
+| :--- | :--- |
+| **M5Stack** | プロトタイプの中心的な役割を担っています。 |
+| **HX711** | ゴミの重量を精密に測定するために使用しています。 |
+| **QRコードスキャナー** | ユーザーのQRコードを高速かつ正確に読み取ります。 |
+
+### WEBアプリ
+
+| 技術 | 目的 |
+| :--- | :--- |
+| **Flutter** | FlutterWebを使用
+| **Firebase** | データベース、画像ストレージ、ユーザー認証など、バックエンド機能全般で活用しています。 |
