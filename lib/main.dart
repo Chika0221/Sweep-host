@@ -25,7 +25,7 @@ class MyApp extends HookConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       theme: ThemeData(
         colorSchemeSeed: Colors.blue.shade600,
         fontFamily: "Zen_Maru_Gothic",

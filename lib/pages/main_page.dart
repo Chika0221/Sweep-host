@@ -39,7 +39,14 @@ class MainPage extends HookConsumerWidget {
                   },
                   icon: Icon(Icons.menu_rounded),
                 ),
-                SweepLogo(),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  width: (navigationOpen.value) ? 200 : 100,
+                  child: Image.asset(
+                    "assets/icons/icon_android_foreground.png",
+                    width: 200,
+                  ),
+                ),
               ],
             ),
             destinations: [
