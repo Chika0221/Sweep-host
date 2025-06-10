@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Project imports:
 import 'package:sweep_host/firebase_options.dart';
+import 'package:sweep_host/pages/login_page/login_page.dart';
 import 'package:sweep_host/pages/main_page.dart';
 
 Future<void> main() async {
@@ -30,7 +31,7 @@ class MyApp extends HookConsumerWidget {
         colorSchemeSeed: Colors.blue.shade600,
         fontFamily: "Zen_Maru_Gothic",
       ),
-      home: MainPage(),
+      home: LoginPage(),
     );
   }
 }
