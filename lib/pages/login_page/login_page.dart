@@ -43,7 +43,7 @@ class LoginPage extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 /*ログインフォーム*/
-                Text("ログイン",style: Theme.of(context).textTheme.),
+                Text("ログイン"),
               ],
             ),
           ),
