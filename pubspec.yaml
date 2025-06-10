@@ -99,7 +99,7 @@ flutter:
     - assets/images/markers/trash.svg
     - assets/images/markers/trashCan.svg
     - assets/images/coin.png
-    - assets/icons/
+    - assets/icons/sweep-hostIcon.png
     # - assets/fonts
 
   fonts:
