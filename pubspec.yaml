@@ -100,6 +100,7 @@ flutter:
     - assets/images/markers/trashCan.svg
     - assets/images/coin.png
     - assets/icons/sweep-hostIcon.png
+    - assets/icons/icon_android_foreground.png
     # - assets/fonts
 
   fonts:

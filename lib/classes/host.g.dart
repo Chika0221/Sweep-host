@@ -7,7 +7,7 @@ part of 'host.dart';
 // **************************************************************************
 
 _Host _$HostFromJson(Map<String, dynamic> json) => _Host(
-  diaplayName: json['diaplayName'] as String,
+  displayName: json['displayName'] as String,
   email: json['email'] as String,
   homeLocation: LatLng(
     (json['homeLocation'] as GeoPoint).latitude,
@@ -18,7 +18,7 @@ _Host _$HostFromJson(Map<String, dynamic> json) => _Host(
 );
 
 Map<String, dynamic> _$HostToJson(_Host instance) => <String, dynamic>{
-  'diaplayName': instance.diaplayName,
+  'displayName': instance.displayName,
   'email': instance.email,
   'homeLocation': GeoPoint(
     instance.homeLocation.latitude,
