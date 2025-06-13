@@ -13,6 +13,10 @@ class LoginNotifier extends Notifier<String> {
     return "";
   }
 
+  void setState(String newState) {
+    state = newState;
+  }
+
   Future<String> signInWIthEmailAndPassword(
     String email,
     String password,

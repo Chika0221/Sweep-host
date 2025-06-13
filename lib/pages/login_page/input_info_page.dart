@@ -11,6 +11,7 @@ import 'package:latlong2/latlong.dart';
 // Project imports:
 import 'package:sweep_host/classes/host.dart';
 import 'package:sweep_host/pages/main_page.dart';
+import 'package:sweep_host/states/host_provider.dart';
 import 'package:sweep_host/states/login_notifier.dart';
 
 const biwako = LatLng(35.1500, 136.1000);
@@ -98,6 +99,7 @@ class InputInfoPage extends HookConsumerWidget {
                           .collection("host")
                           .doc(hostId);
                       await UserDoc.set(data.toJson());
+                      ref.read(loginProvider.notifier).setState(hostId);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => const MainPage(),
