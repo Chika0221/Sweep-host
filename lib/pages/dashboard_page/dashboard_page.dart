@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Project imports:
+import 'package:sweep_host/pages/dashboard_page/activity_list_view.dart';
+import 'package:sweep_host/pages/dashboard_page/host_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/info_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/line_shart.dart';
 import 'package:sweep_host/pages/dashboard_page/submit_trashbox.dart';
@@ -20,10 +22,8 @@ class DashboardPage extends HookConsumerWidget {
           Expanded(
             child: Column(
               children: [
-                Flexible(
-                  child: InfoPlate()
-                ),
-                Flexible(
+                Expanded(child: InfoPlate()),
+                Expanded(
                   child: LineChartSample4(
                     mainLineColor: Colors.blue,
                     belowLineColor: Colors.blue.withAlpha(100),
@@ -34,16 +34,12 @@ class DashboardPage extends HookConsumerWidget {
             ),
           ),
           VerticalDivider(indent: 16, endIndent: 16),
-          SizedBox(
-            width: 300,
-            child: Padding(
-              padding: EdgeInsets.all(16),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child: TrashboxStateListView()),
-                  SubmitTrashboxButton(),
-                ],
+                mainAxisSize: MainAxisSize.max,
+                children: [HostPlate(), ActivityListView()],
               ),
             ),
           ),

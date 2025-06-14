@@ -19,32 +19,35 @@ class HostPlate extends HookConsumerWidget {
 
     print(hostProfile);
 
-    return Padding(
+    return Container(
+      height: 60 + 16 + 16,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(16),
+      ),
       padding: const EdgeInsets.all(16.0),
       child: hostProfile.when(
         data: (data) {
-          print(data);
           return Row(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // SizedBox(
-              //   height: 60,
-              //   width: 60,
-              //   child: CircleAvatar(
-              //     radius: 30,
-              //     backgroundColor: Colors.transparent,
-              //     child: ImageNetwork(
-              //       image: data.photoURL,
-              //       height: 60,
-              //       width: 60,
-              //       fitAndroidIos: BoxFit.cover,
-              //       fitWeb: BoxFitWeb.cover,
-              //       onPointer: true,
-              //     ),
-              //   ),
-              // ),
-              // const SizedBox(width: 16),
+              SizedBox(
+                height: 60,
+                width: 60,
+                child: CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.transparent,
+                  child: ImageNetwork(
+                    image: data.photoURL,
+                    height: 60,
+                    width: 60,
+                    fitAndroidIos: BoxFit.cover,
+                    fitWeb: BoxFitWeb.cover,
+                    onPointer: true,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -64,8 +67,12 @@ class HostPlate extends HookConsumerWidget {
             ],
           );
         },
-        error: (error, stackTrace) {},
-        loading: () {},
+        error: (error, stackTrace) {
+          return Text("エラーです");
+        },
+        loading: () {
+          return CircularProgressIndicator();
+        },
       ),
     );
   }
