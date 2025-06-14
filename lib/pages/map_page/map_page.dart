@@ -17,6 +17,7 @@ import 'package:sweep_host/pages/map_page/home_position_container.dart';
 import 'package:sweep_host/pages/map_page/trash_maker_child.dart';
 import 'package:sweep_host/states/host_provider.dart';
 import 'package:sweep_host/states/post_stream_provider.dart';
+import 'package:sweep_host/states/trashbox_stream_provider.dart';
 import 'package:sweep_host/widgets/post_item.dart';
 
 class MapPage extends StatefulHookConsumerWidget {
@@ -40,7 +41,9 @@ class _MapPageState extends ConsumerState<MapPage>
   @override
   Widget build(BuildContext context) {
     final postData = ref.watch(postStreamProvider);
+    final trashBoxData = ref.watch(trashBoxStreamProvider);
     final hostData = ref.watch(hostProvider);
+
     final heatmapToggle = useState(false);
     final isOpenSideMenu = useState(false);
 
@@ -64,7 +67,7 @@ class _MapPageState extends ConsumerState<MapPage>
                         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   ),
 
-                  if (!heatmapToggle.value)
+                  if (!heatmapToggle.value) ...[
                     postData.when(
                       data: (data) {
                         return MarkerLayer(
@@ -102,6 +105,34 @@ class _MapPageState extends ConsumerState<MapPage>
                         );
                       },
                     ),
+                    trashBoxData.when(
+                      data: (data) {
+                        return MarkerLayer(
+                          markers: List.generate(data.length, (index) {
+                            final trashBox = data[index];
+                            return Marker(
+                              point: trashBox.location,
+                              width: 50,
+                              height: 50,
+                              alignment: Alignment.center,
+                              rotate: true,
+                              child: TrashMakerChild(type: PostType.trashBox),
+                            );
+                          }),
+                        );
+                      },
+                      error:
+                          (error, stackTrace) =>
+                              Center(child: Text(error.toString())),
+                      loading: () {
+                        return Positioned(
+                          left: 16,
+                          top: 16,
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+                  ],
 
                   // 役所ピン
                   MarkerLayer(
@@ -167,7 +198,7 @@ class _MapPageState extends ConsumerState<MapPage>
                       padding: EdgeInsets.fromLTRB(4, 4, 8, 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(20),
+                          left: Radius.circular(100),
                         ),
                         color:
                             Theme.of(context).colorScheme.surfaceContainerLow,
@@ -176,7 +207,7 @@ class _MapPageState extends ConsumerState<MapPage>
                         onPressed: () {
                           isOpenSideMenu.value = !isOpenSideMenu.value;
                         },
-                        icon: Icon(Icons.ads_click),
+                        icon: Icon(Icons.delete_rounded),
                       ),
                     ),
                   ),
@@ -243,6 +274,8 @@ class _MapPageState extends ConsumerState<MapPage>
             },
           ),
         ),
+
+        // サイドメニュー　SwapBox
         AnimatedContainer(
           duration: Duration(milliseconds: 200),
           curve: Curves.easeInOut,

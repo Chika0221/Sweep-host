@@ -98,6 +98,7 @@ flutter:
   assets:
     - assets/images/markers/trash.svg
     - assets/images/markers/trashCan.svg
+    - assets/images/markers/trashBox.svg
     - assets/images/coin.png
     - assets/icons/sweep-hostIcon.png
     - assets/icons/icon_android_foreground.png

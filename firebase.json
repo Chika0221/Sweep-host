@@ -1,1 +1,28 @@
-{"flutter":{"platforms":{"dart":{"lib/firebase_options.dart":{"projectId":"sweep-dbccd","configurations":{"web":"1:978051291639:web:034bc28e5fe44ec6e2f6f2"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "sweep-dbccd",
+          "configurations": {
+            "web": "1:978051291639:web:034bc28e5fe44ec6e2f6f2"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

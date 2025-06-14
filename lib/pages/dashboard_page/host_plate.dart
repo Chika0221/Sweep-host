@@ -37,13 +37,11 @@ class HostPlate extends HookConsumerWidget {
                 child: CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.transparent,
-                  child: ImageNetwork(
-                    image: data.photoURL,
+                  child: Image.network(
+                    data.photoURL,
                     height: 60,
                     width: 60,
-                    fitAndroidIos: BoxFit.cover,
-                    fitWeb: BoxFitWeb.cover,
-                    onPointer: true,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
