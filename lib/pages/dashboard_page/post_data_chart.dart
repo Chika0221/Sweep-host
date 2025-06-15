@@ -11,7 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // Project imports:
 import 'package:sweep_host/states/post_stream_provider.dart';
 
-const int displayDayNumber = 14;
+const int displayDayNumber = 14 ;
 
 class PostDataChart extends HookConsumerWidget {
   const PostDataChart({super.key});
