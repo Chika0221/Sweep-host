@@ -9,6 +9,7 @@ import 'package:sweep_host/pages/dashboard_page/activity_list_view.dart';
 import 'package:sweep_host/pages/dashboard_page/host_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/info_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/line_shart.dart';
+import 'package:sweep_host/pages/dashboard_page/post_data_chart.dart';
 import 'package:sweep_host/pages/dashboard_page/submit_trashbox.dart';
 import 'package:sweep_host/pages/dashboard_page/trashbox_state_list_view.dart';
 
@@ -16,20 +17,13 @@ class DashboardPage extends HookConsumerWidget {
   const DashboardPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Row(
       children: [
         Expanded(
           child: Column(
             children: [
-              Expanded(child: InfoPlate()),
-              Expanded(
-                child: LineChartSample4(
-                  mainLineColor: Colors.blue,
-                  belowLineColor: Colors.blue.withAlpha(100),
-                  aboveLineColor: Colors.grey.withAlpha(100),
-                ),
-              ),
+              Flexible(flex: 1, child: InfoPlate()),
+              Flexible(flex: 2, child: PostDataChart()),
             ],
           ),
         ),

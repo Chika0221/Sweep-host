@@ -39,8 +39,6 @@ class InfoPlate extends HookConsumerWidget {
               context,
             ).textTheme.displayLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
-          Spacer(),
-          Divider(),
           SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
