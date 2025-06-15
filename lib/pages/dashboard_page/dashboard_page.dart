@@ -16,35 +16,34 @@ class DashboardPage extends HookConsumerWidget {
   const DashboardPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Expanded(
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(child: InfoPlate()),
-                Expanded(
-                  child: LineChartSample4(
-                    mainLineColor: Colors.blue,
-                    belowLineColor: Colors.blue.withAlpha(100),
-                    aboveLineColor: Colors.grey.withAlpha(100),
-                  ),
+
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            children: [
+              Expanded(child: InfoPlate()),
+              Expanded(
+                child: LineChartSample4(
+                  mainLineColor: Colors.blue,
+                  belowLineColor: Colors.blue.withAlpha(100),
+                  aboveLineColor: Colors.grey.withAlpha(100),
                 ),
-              ],
-            ),
-          ),
-          VerticalDivider(indent: 16, endIndent: 16),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SizedBox(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [HostPlate(), ActivityListView()],
               ),
+            ],
+          ),
+        ),
+        VerticalDivider(indent: 16, endIndent: 16),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [HostPlate(), ActivityListView()],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -16,30 +16,28 @@ class HistoryPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ValueNotifier<Post?> focusPost = useState(null);
 
-    return Expanded(
-      child: Row(
-        children: [
-          Flexible(
-            flex: 2,
-            child: Center(
-              child:
-                  (focusPost.value != null)
-                      ? PostDetailContainer(post: focusPost.value!)
-                      : Text("投稿を選択してください"),
-            ),
+    return Row(
+      children: [
+        Flexible(
+          flex: 2,
+          child: Center(
+            child:
+                (focusPost.value != null)
+                    ? PostDetailContainer(post: focusPost.value!)
+                    : Text("投稿を選択してください"),
           ),
-          Flexible(
-            flex: 1,
-            child: HistoryList(
-              onTileTap: (post) async {
-                focusPost.value = null;
-                await Future.delayed(Duration(milliseconds: 1));
-                focusPost.value = post;
-              },
-            ),
+        ),
+        Flexible(
+          flex: 1,
+          child: HistoryList(
+            onTileTap: (post) async {
+              focusPost.value = null;
+              await Future.delayed(Duration(milliseconds: 1));
+              focusPost.value = post;
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

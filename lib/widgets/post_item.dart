@@ -20,7 +20,11 @@ class PostItem extends HookConsumerWidget {
     final tapNice = useState(false);
 
     return Container(
-      width: post.imagePaths.length * 400,
+      width:
+          16 +
+          16 +
+          post.imagePaths.length * 300 +
+          (post.imagePaths.length - 1) * 8,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,16 +50,15 @@ class PostItem extends HookConsumerWidget {
               ? SizedBox(
                 height: 400,
                 width: double.infinity,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: post.imagePaths.length,
-                  itemBuilder: (context, index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Flexible(
-                        flex: post.imagePaths.length,
+                child: Row(
+                  spacing: 8,
+                  children: List.generate(post.imagePaths.length, (index) {
+                    return Flexible(
+                      flex: post.imagePaths.length,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
                         child: ImageNetwork(
-                          image: post.imagePaths[index], // 最初の画像を表示
+                          image: post.imagePaths[index],
                           width: 300,
                           height: 400,
                           fitWeb: BoxFitWeb.cover,
@@ -64,10 +67,7 @@ class PostItem extends HookConsumerWidget {
                         ),
                       ),
                     );
-                  },
-                  separatorBuilder: (context, index) {
-                    return SizedBox(width: 4);
-                  },
+                  }),
                 ),
               )
               : const SizedBox(height: 12.0),

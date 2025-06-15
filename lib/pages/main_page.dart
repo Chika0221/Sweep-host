@@ -20,68 +20,71 @@ class MainPage extends HookConsumerWidget {
     final navigationSelected = useState(0);
     final navigationOpen = useState(false);
 
-    return Scaffold(
-      body: Row(
-        children: [
-          NavigationRail(
-            selectedIndex: navigationSelected.value,
-            useIndicator: true,
-            onDestinationSelected: (value) {
-              navigationSelected.value = value;
-            },
-            labelType: NavigationRailLabelType.none,
-            extended: navigationOpen.value,
-            leading: Column(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    navigationOpen.value = !navigationOpen.value;
-                  },
-                  icon: Icon(Icons.menu_rounded),
+    return (MediaQuery.of(context).size.width >= 1260)
+        ? Scaffold(
+          body: Row(
+            children: [
+              NavigationRail(
+                selectedIndex: navigationSelected.value,
+                useIndicator: true,
+                onDestinationSelected: (value) {
+                  navigationSelected.value = value;
+                },
+                labelType: NavigationRailLabelType.none,
+                extended: navigationOpen.value,
+                leading: Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        navigationOpen.value = !navigationOpen.value;
+                      },
+                      icon: Icon(Icons.menu_rounded),
+                    ),
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      width: (navigationOpen.value) ? 200 : 100,
+                      child: Image.asset(
+                        "assets/icons/icon_android_foreground.png",
+                        width: 200,
+                      ),
+                    ),
+                  ],
                 ),
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  width: (navigationOpen.value) ? 200 : 100,
-                  child: Image.asset(
-                    "assets/icons/icon_android_foreground.png",
-                    width: 200,
+                destinations: [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.dashboard_rounded),
+                    label: Text("ダッシュボード"),
                   ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.map_rounded),
+                    label: Text("マップ"),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.history_rounded),
+                    label: Text("投稿履歴"),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.analytics_rounded),
+                    label: Text("分析"),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: IndexedStack(
+                  index: navigationSelected.value,
+                  children: const [
+                    DashboardPage(),
+                    MapPage(),
+                    HistoryPage(),
+                    AnalyticsPage(),
+                  ],
                 ),
-              ],
-            ),
-            destinations: [
-              NavigationRailDestination(
-                icon: Icon(Icons.dashboard_rounded),
-                label: Text("ダッシュボード"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.map_rounded),
-                label: Text("マップ"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.history_rounded),
-                label: Text("投稿履歴"),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.analytics_rounded),
-                label: Text("分析"),
               ),
             ],
           ),
-          Expanded(
-            child: IndexedStack(
-              index: navigationSelected.value,
-              children: const [
-                DashboardPage(),
-                MapPage(),
-                HistoryPage(),
-                AnalyticsPage(),
-              ],
-            ),
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+        )
+        : Material(child: Center(child: Text("PCで開いてください")));
   }
 }
