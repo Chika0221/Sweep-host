@@ -24,6 +24,7 @@ class DashboardPage extends HookConsumerWidget {
                 flex: 2,
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                  padding: EdgeInsets.all(32),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(30),
