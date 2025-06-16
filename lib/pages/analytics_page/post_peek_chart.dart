@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:math';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -12,6 +15,8 @@ class PostPeekChart extends HookConsumerWidget {
   const PostPeekChart({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final postStream = ref.watch(postStreamProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,12 +44,30 @@ class PostPeekChart extends HookConsumerWidget {
                 size: 32,
               ),
               Spacer(),
+              postStream.when(
+                data: (data) {
+                  final peekHours = List.filled(25, 0);
 
-              Text(
-                '10:00',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                  for (var post in data) {
+                    peekHours[post.time.hour] += 1;
+                  }
+
+                  final maxValue = peekHours.reduce(max);
+                  final maxIndex = peekHours.indexOf(maxValue);
+
+                  return Text(
+                    '${maxIndex}:00 ~ ${maxIndex + 1}:00',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  );
+                },
+                error: (error, stackTrace) {
+                  return Text('error :$error');
+                },
+                loading: () {
+                  return CircularProgressIndicator();
+                },
               ),
               SizedBox(width: 16),
             ],
