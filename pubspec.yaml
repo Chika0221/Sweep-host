@@ -71,6 +71,7 @@ dependencies:
   image_network: ^2.6.0
   flutter_map_heatmap: ^0.0.8
   flutter_launcher_icons: ^0.14.3
+  flutter_layout_grid: ^2.0.8
 
 dev_dependencies:
   flutter_test:

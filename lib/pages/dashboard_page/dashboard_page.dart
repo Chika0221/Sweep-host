@@ -20,7 +20,19 @@ class DashboardPage extends HookConsumerWidget {
           child: Column(
             children: [
               Flexible(flex: 1, child: InfoPlate()),
-              Flexible(flex: 2, child: PostDataChart()),
+              Flexible(
+                flex: 2,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(30),
+                    ),
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
+                  ),
+                  child: PostDataChart(),
+                ),
+              ),
             ],
           ),
         ),

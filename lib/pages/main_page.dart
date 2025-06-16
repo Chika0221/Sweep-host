@@ -6,7 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Project imports:
-import 'package:sweep_host/pages/analytics_page.dart';
+import 'package:sweep_host/pages/analytics_page/analytics_page.dart';
 import 'package:sweep_host/pages/dashboard_page/dashboard_page.dart';
 import 'package:sweep_host/pages/history_page/history_page.dart';
 import 'package:sweep_host/pages/map_page/map_page.dart';
