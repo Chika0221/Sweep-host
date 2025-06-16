@@ -186,7 +186,10 @@ class _MapPageState extends ConsumerState<MapPage>
                       onPressed: () {
                         heatmapToggle.value = !heatmapToggle.value;
                       },
-                      label: Text("ヒートマップ表示"),
+                      label:
+                          (heatmapToggle.value)
+                              ? Text("ゴミ箱マップ表示")
+                              : Text("ヒートマップ表示"),
                     ),
                   ),
 
@@ -255,9 +258,12 @@ class _MapPageState extends ConsumerState<MapPage>
                               zoom: 12,
                             );
                           },
-                          child: const Icon(
+                          child: Icon(
                             Icons.home_rounded,
-                            color: Colors.white,
+                            color:
+                                Theme.of(
+                                  context,
+                                ).colorScheme.onPrimaryContainer,
                           ),
                         ),
                       ],

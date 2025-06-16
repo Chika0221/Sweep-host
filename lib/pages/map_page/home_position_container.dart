@@ -15,7 +15,12 @@ class HomePositionContainer extends HookConsumerWidget {
         shape: BoxShape.circle,
         color: Theme.of(context).colorScheme.primary,
       ),
-      child: Center(child: Icon(Icons.home_rounded)),
+      child: Center(
+        child: Icon(
+          Icons.home_rounded,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
+      ),
     );
   }
 }

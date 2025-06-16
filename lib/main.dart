@@ -32,6 +32,7 @@ class MyApp extends HookConsumerWidget {
         fontFamily: "Zen_Maru_Gothic",
       ),
       home: LoginPage(),
+      // home: MainPage(),
     );
   }
 }
