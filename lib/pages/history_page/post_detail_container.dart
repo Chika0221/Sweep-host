@@ -2,15 +2,12 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_network/image_network.dart';
 
 // Project imports:
 import 'package:sweep_host/classes/post.dart';
-import 'package:sweep_host/classes/profile.dart';
 import 'package:sweep_host/pages/history_page/map_box.dart';
-import 'package:sweep_host/states/user_stream_provider.dart';
 
 class PostDetailContainer extends HookConsumerWidget {
   const PostDetailContainer({super.key, required this.post});

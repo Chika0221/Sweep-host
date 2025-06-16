@@ -8,10 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sweep_host/pages/dashboard_page/activity_list_view.dart';
 import 'package:sweep_host/pages/dashboard_page/host_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/info_plate.dart';
-import 'package:sweep_host/pages/dashboard_page/line_shart.dart';
 import 'package:sweep_host/pages/dashboard_page/post_data_chart.dart';
-import 'package:sweep_host/pages/dashboard_page/submit_trashbox.dart';
-import 'package:sweep_host/pages/dashboard_page/trashbox_state_list_view.dart';
 
 class DashboardPage extends HookConsumerWidget {
   const DashboardPage({super.key});

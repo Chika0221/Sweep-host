@@ -1,4 +1,6 @@
 // Flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -11,7 +13,6 @@ import 'package:latlong2/latlong.dart';
 // Project imports:
 import 'package:sweep_host/classes/host.dart';
 import 'package:sweep_host/pages/main_page.dart';
-import 'package:sweep_host/states/host_provider.dart';
 import 'package:sweep_host/states/login_notifier.dart';
 
 const biwako = LatLng(35.1500, 136.1000);

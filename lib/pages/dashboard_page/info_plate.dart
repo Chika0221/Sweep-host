@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Project imports:
-import 'package:sweep_host/pages/dashboard_page/host_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/info_plate_item.dart';
 import 'package:sweep_host/states/get_discards_provider.dart';
 import 'package:sweep_host/states/post_stream_provider.dart';

@@ -4,7 +4,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:latlong2/latlong.dart';
 
 part 'post.freezed.dart';
-
 part 'post.g.dart';
 
 @freezed

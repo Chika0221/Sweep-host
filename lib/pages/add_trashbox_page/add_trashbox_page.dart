@@ -10,7 +10,6 @@ import 'package:latlong2/latlong.dart';
 
 // Project imports:
 import 'package:sweep_host/pages/map_page/home_position_container.dart';
-import 'package:sweep_host/pages/map_page/map_page.dart';
 import 'package:sweep_host/states/host_provider.dart';
 
 class AddTrashboxPage extends StatefulHookConsumerWidget {

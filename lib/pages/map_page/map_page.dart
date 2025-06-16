@@ -7,7 +7,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:latlong2/latlong.dart';
 
 // Project imports:
 import 'package:sweep_host/classes/post.dart';
@@ -151,7 +150,7 @@ class _MapPageState extends ConsumerState<MapPage>
                         final heatMapData =
                             data
                                 .where((e) => e.type == PostType.trash)
-                                .map((e) => WeightedLatLng(e!.location, 25))
+                                .map((e) => WeightedLatLng(e.location, 25))
                                 .toList();
 
                         return Container(

@@ -1,4 +1,6 @@
 // Flutter imports:
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -8,7 +10,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // Project imports:
 import 'package:sweep_host/firebase_options.dart';
 import 'package:sweep_host/pages/login_page/login_page.dart';
-import 'package:sweep_host/pages/main_page.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

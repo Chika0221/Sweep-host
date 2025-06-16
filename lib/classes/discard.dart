@@ -1,7 +1,6 @@
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:latlong2/latlong.dart';
 
 part 'discard.freezed.dart';
 part 'discard.g.dart';

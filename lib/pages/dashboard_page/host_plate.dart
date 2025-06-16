@@ -3,19 +3,15 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_network/image_network.dart';
 
 // Project imports:
-import 'package:sweep_host/classes/host.dart';
 import 'package:sweep_host/states/host_provider.dart';
-import 'package:sweep_host/states/login_notifier.dart';
 
 class HostPlate extends HookConsumerWidget {
   const HostPlate({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hostProfile = ref.watch(hostProvider);
-    final login = ref.watch(loginProvider);
 
     print(hostProfile);
 
