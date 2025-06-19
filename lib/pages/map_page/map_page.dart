@@ -1,3 +1,6 @@
+// Dart imports:
+import 'dart:convert';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -7,6 +10,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 
 // Project imports:
 import 'package:sweep_host/classes/post.dart';
@@ -30,6 +35,35 @@ class _MapPageState extends ConsumerState<MapPage>
     with TickerProviderStateMixin {
   late AnimatedMapController animatedMapController;
 
+  // ルート計算
+  Future<List<LatLng>> fetchRoute(List<LatLng> wayPoints) async {
+    final String points = wayPoints
+        .map((point) => "${point.longitude},${point.latitude}")
+        .toList()
+        .join(";");
+
+    final String url =
+        "http://router.project-osrm.org/route/v1/driving/${points}?geometries=geojson";
+
+    final response = await http.get(Uri.parse(url));
+
+    print("レスポ：${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      final List<dynamic> coordinates =
+          data['routes'][0]['geometry']['coordinates'];
+
+      final routePoints =
+          coordinates.map((coord) => LatLng(coord[1], coord[0])).toList();
+
+      return routePoints;
+    } else {
+      return List.empty();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +79,25 @@ class _MapPageState extends ConsumerState<MapPage>
 
     final heatmapToggle = useState(false);
     final isOpenSideMenu = useState(false);
+    final routePoints = useState<List<LatLng>>([]);
+
+    useEffect(() {
+      Future<void> loadRoute() async {
+        try {
+          final fetchRoutePoints = await fetchRoute([
+            LatLng(34.98516766981969, 136.0143951288485),
+            LatLng(35.022126283391664, 135.96185499045154),
+          ]);
+
+          routePoints.value = fetchRoutePoints;
+        } catch (e) {
+          print("ルート取得エラー");
+        }
+      }
+
+      loadRoute();
+      return null;
+    }, []);
 
     return Row(
       children: [
@@ -191,6 +244,17 @@ class _MapPageState extends ConsumerState<MapPage>
                               : Text("ヒートマップ表示"),
                     ),
                   ),
+
+                  if (routePoints.value.isNotEmpty)
+                    PolylineLayer(
+                      polylines: [
+                        Polyline(
+                          points: routePoints.value,
+                          strokeWidth: 8,
+                          color: Colors.blue,
+                        ),
+                      ],
+                    ),
 
                   // サイドメニュー
                   Positioned(
