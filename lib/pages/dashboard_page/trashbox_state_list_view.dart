@@ -33,7 +33,7 @@ class TrashboxStateListView extends HookConsumerWidget {
             );
           },
           separatorBuilder: (context, index) {
-            return Divider();
+            return SizedBox(height: 8);
           },
         );
       },

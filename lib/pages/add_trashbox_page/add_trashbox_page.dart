@@ -7,10 +7,14 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:uuid/uuid.dart';
 
 // Project imports:
+import 'package:sweep_host/classes/trash_box.dart';
 import 'package:sweep_host/pages/map_page/home_position_container.dart';
+import 'package:sweep_host/scripts/firebase_script.dart';
 import 'package:sweep_host/states/host_provider.dart';
+import 'package:sweep_host/states/trashbox_stream_provider.dart';
 
 class AddTrashboxPage extends StatefulHookConsumerWidget {
   const AddTrashboxPage({super.key});
@@ -249,6 +253,16 @@ class _AddTrashboxPageState extends ConsumerState<AddTrashboxPage>
                                 "Location: ${selectedPosition.value?.latitude}, ${selectedPosition.value?.longitude}",
                               );
                               // Example: ref.read(hostProvider.notifier).addTrashbox(...);
+                              final trashBox = TrashBox(
+                                trashBoxId: Uuid().v4(),
+                                name: nameController.text,
+                                location: selectedPosition.value!,
+                                maxWeight:
+                                    int.parse(weightController.text) * 1000,
+                              );
+
+                              FirebaseScript().addTrashbox(trashBox);
+
                               Navigator.of(context).pop();
                             }
                           },

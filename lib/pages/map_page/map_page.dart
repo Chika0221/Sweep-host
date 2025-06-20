@@ -37,6 +37,10 @@ class _MapPageState extends ConsumerState<MapPage>
 
   // ルート計算
   Future<List<LatLng>> fetchRoute(List<LatLng> wayPoints) async {
+    if (wayPoints.isEmpty) {
+      return [];
+    }
+
     final String points = wayPoints
         .map((point) => "${point.longitude},${point.latitude}")
         .toList()
@@ -46,8 +50,6 @@ class _MapPageState extends ConsumerState<MapPage>
         "http://router.project-osrm.org/route/v1/driving/${points}?geometries=geojson";
 
     final response = await http.get(Uri.parse(url));
-
-    print("レスポ：${response.statusCode}");
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
@@ -60,7 +62,7 @@ class _MapPageState extends ConsumerState<MapPage>
 
       return routePoints;
     } else {
-      return List.empty();
+      throw Exception(response.statusCode);
     }
   }
 
@@ -78,20 +80,24 @@ class _MapPageState extends ConsumerState<MapPage>
     final hostData = ref.watch(hostProvider);
 
     final heatmapToggle = useState(false);
-    final isOpenSideMenu = useState(false);
+    final isOpenTrashBoxList = useState(false);
+    final isOpenRoutePage = useState(false);
     final routePoints = useState<List<LatLng>>([]);
+    final wayPoints = useState<List<LatLng>>([
+      LatLng(34.98516766981969, 136.0143951288485),
+      LatLng(35.022126283391664, 135.96185499045154),
+      LatLng(35.00353500276053, 135.86487627013398),
+    ]);
 
     useEffect(() {
       Future<void> loadRoute() async {
         try {
-          final fetchRoutePoints = await fetchRoute([
-            LatLng(34.98516766981969, 136.0143951288485),
-            LatLng(35.022126283391664, 135.96185499045154),
-          ]);
+          final fetchRoutePoints = await fetchRoute(wayPoints.value);
 
           routePoints.value = fetchRoutePoints;
         } catch (e) {
-          print("ルート取得エラー");
+          debugPrint("ルート取得エラー code:$e");
+          routePoints.value = [];
         }
       }
 
@@ -251,12 +257,13 @@ class _MapPageState extends ConsumerState<MapPage>
                         Polyline(
                           points: routePoints.value,
                           strokeWidth: 8,
-                          color: Colors.blue,
+                          // color: Colors.blue,
+                          gradientColors: [Colors.blue, Colors.red],
                         ),
                       ],
                     ),
 
-                  // サイドメニュー
+                  // サイドメニュー ボタンたち
                   Positioned(
                     right: 0,
                     top: 8,
@@ -264,16 +271,31 @@ class _MapPageState extends ConsumerState<MapPage>
                       padding: EdgeInsets.fromLTRB(4, 4, 8, 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(100),
+                          left: Radius.circular(24),
                         ),
                         color:
                             Theme.of(context).colorScheme.surfaceContainerLow,
                       ),
-                      child: IconButton.filledTonal(
-                        onPressed: () {
-                          isOpenSideMenu.value = !isOpenSideMenu.value;
-                        },
-                        icon: Icon(Icons.delete_rounded),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton.filledTonal(
+                            onPressed: () {
+                              isOpenRoutePage.value = false;
+                              isOpenTrashBoxList.value =
+                                  !isOpenTrashBoxList.value;
+                            },
+                            icon: Icon(Icons.delete_rounded),
+                          ),
+                          SizedBox(height: 8),
+                          IconButton.filledTonal(
+                            onPressed: () {
+                              isOpenTrashBoxList.value = false;
+                              isOpenRoutePage.value = !isOpenRoutePage.value;
+                            },
+                            icon: Icon(Icons.route_rounded),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -348,7 +370,7 @@ class _MapPageState extends ConsumerState<MapPage>
         AnimatedContainer(
           duration: Duration(milliseconds: 200),
           curve: Curves.easeInOut,
-          width: (isOpenSideMenu.value) ? 300 : 0,
+          width: (isOpenTrashBoxList.value) ? 300 : 0,
           color: Theme.of(context).colorScheme.surfaceContainerLow,
           child: Padding(
             padding: EdgeInsets.all(16),
@@ -367,6 +389,54 @@ class _MapPageState extends ConsumerState<MapPage>
                     },
                   ),
                 ),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      isOpenTrashBoxList.value = false;
+                      isOpenRoutePage.value = true;
+                    },
+                    child: Text("回収ルートを生成"),
+                  ),
+                ),
+                SizedBox(height: 8),
+                SubmitTrashboxButton(),
+              ],
+            ),
+          ),
+        ),
+
+        // サイドメニュー　ルート
+        AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+          width: (isOpenRoutePage.value) ? 300 : 0,
+          color: Theme.of(context).colorScheme.primary,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: TrashboxStateListView(
+                    onItemTap: (location) {
+                      animatedMapController.animateTo(
+                        dest: location,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.easeIn,
+                        zoom: 15,
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    child: Text("回収ルートを生成"),
+                  ),
+                ),
+                SizedBox(height: 8),
                 SubmitTrashboxButton(),
               ],
             ),
@@ -376,3 +446,14 @@ class _MapPageState extends ConsumerState<MapPage>
     );
   }
 }
+
+
+
+/*
+[
+            LatLng(34.98516766981969, 136.0143951288485),
+            LatLng(35.022126283391664, 135.96185499045154),
+            LatLng(35.00353500276053, 135.86487627013398),
+          ]
+
+*/
