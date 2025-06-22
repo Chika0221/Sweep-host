@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_network/image_network.dart';
 
 // Project imports:
 import 'package:sweep_host/states/host_provider.dart';
@@ -12,8 +13,6 @@ class HostPlate extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hostProfile = ref.watch(hostProvider);
-
-    print(hostProfile);
 
     return Container(
       height: 60 + 16 + 16,
@@ -33,11 +32,11 @@ class HostPlate extends HookConsumerWidget {
                 child: CircleAvatar(
                   radius: 30,
                   backgroundColor: Colors.transparent,
-                  child: Image.network(
-                    data.photoURL,
+                  child: ImageNetwork(
+                    image: data.photoURL,
                     height: 60,
                     width: 60,
-                    fit: BoxFit.cover,
+                    fitWeb: BoxFitWeb.contain,
                   ),
                 ),
               ),

@@ -1,22 +1,31 @@
 // Dart imports:
 import 'dart:convert';
+import 'dart:math';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 // Package imports:
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
 import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:timeline_tile/timeline_tile.dart';
 
 // Project imports:
 import 'package:sweep_host/classes/post.dart';
+import 'package:sweep_host/classes/trash_box.dart';
 import 'package:sweep_host/pages/dashboard_page/submit_trashbox.dart';
 import 'package:sweep_host/pages/dashboard_page/trashbox_state_list_view.dart';
+import 'package:sweep_host/pages/dashboard_page/trashbox_state_list_view_item.dart';
+import 'package:sweep_host/pages/map_page/create_route.dart';
+import 'package:sweep_host/pages/map_page/create_route_list.dart';
 import 'package:sweep_host/pages/map_page/home_position_container.dart';
 import 'package:sweep_host/pages/map_page/trash_maker_child.dart';
 import 'package:sweep_host/states/host_provider.dart';
@@ -83,27 +92,8 @@ class _MapPageState extends ConsumerState<MapPage>
     final isOpenTrashBoxList = useState(false);
     final isOpenRoutePage = useState(false);
     final routePoints = useState<List<LatLng>>([]);
-    final wayPoints = useState<List<LatLng>>([
-      LatLng(34.98516766981969, 136.0143951288485),
-      LatLng(35.022126283391664, 135.96185499045154),
-      LatLng(35.00353500276053, 135.86487627013398),
-    ]);
-
-    useEffect(() {
-      Future<void> loadRoute() async {
-        try {
-          final fetchRoutePoints = await fetchRoute(wayPoints.value);
-
-          routePoints.value = fetchRoutePoints;
-        } catch (e) {
-          debugPrint("ルート取得エラー code:$e");
-          routePoints.value = [];
-        }
-      }
-
-      loadRoute();
-      return null;
-    }, []);
+    final wayPoints = useState<List<TrashBox>>([]);
+    final redemptionBorder = useState(0.8);
 
     return Row(
       children: [
@@ -164,10 +154,59 @@ class _MapPageState extends ConsumerState<MapPage>
                       },
                     ),
                     trashBoxData.when(
-                      data: (data) {
+                      data: (trashBoxData) {
+                        wayPoints.value =
+                            trashBoxData.where((trashBox) {
+                              return trashBox.weight >=
+                                  (trashBox.maxWeight * redemptionBorder.value);
+                            }).toList();
+
+                        if (wayPoints.value.length > 1) {
+                          final distance = Distance();
+                          final sortedWaypoints = <TrashBox>[];
+                          var currentLocation = data.homeLocation;
+                          final remainingWaypoints = List<TrashBox>.from(
+                            wayPoints.value,
+                          );
+
+                          while (remainingWaypoints.isNotEmpty) {
+                            TrashBox? closestWaypoint;
+                            var minDistance = double.infinity;
+
+                            for (final waypoint in remainingWaypoints) {
+                              final d = distance(
+                                currentLocation,
+                                waypoint.location,
+                              );
+                              if (d < minDistance) {
+                                minDistance = d;
+                                closestWaypoint = waypoint;
+                              }
+                            }
+
+                            if (closestWaypoint != null) {
+                              sortedWaypoints.add(closestWaypoint);
+                              remainingWaypoints.remove(closestWaypoint);
+                              currentLocation = closestWaypoint.location;
+                            } else {
+                              break;
+                            }
+                          }
+                          wayPoints.value = sortedWaypoints;
+                        }
+
+                        final homeBox = TrashBox(
+                          name: "ホーム",
+                          trashBoxId: "",
+                          location: data.homeLocation,
+                          maxWeight: 0,
+                        );
+                        wayPoints.value.insert(0, homeBox);
+                        wayPoints.value.add(homeBox);
+
                         return MarkerLayer(
-                          markers: List.generate(data.length, (index) {
-                            final trashBox = data[index];
+                          markers: List.generate(trashBoxData.length, (index) {
+                            final trashBox = trashBoxData[index];
                             return Marker(
                               point: trashBox.location,
                               width: 50,
@@ -257,8 +296,7 @@ class _MapPageState extends ConsumerState<MapPage>
                         Polyline(
                           points: routePoints.value,
                           strokeWidth: 8,
-                          // color: Colors.blue,
-                          gradientColors: [Colors.blue, Colors.red],
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -284,6 +322,7 @@ class _MapPageState extends ConsumerState<MapPage>
                               isOpenRoutePage.value = false;
                               isOpenTrashBoxList.value =
                                   !isOpenTrashBoxList.value;
+                              routePoints.value = [];
                             },
                             icon: Icon(Icons.delete_rounded),
                           ),
@@ -292,6 +331,7 @@ class _MapPageState extends ConsumerState<MapPage>
                             onPressed: () {
                               isOpenTrashBoxList.value = false;
                               isOpenRoutePage.value = !isOpenRoutePage.value;
+                              routePoints.value = [];
                             },
                             icon: Icon(Icons.route_rounded),
                           ),
@@ -411,33 +451,163 @@ class _MapPageState extends ConsumerState<MapPage>
           duration: Duration(milliseconds: 200),
           curve: Curves.easeInOut,
           width: (isOpenRoutePage.value) ? 300 : 0,
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
           child: Padding(
             padding: EdgeInsets.all(16),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: TrashboxStateListView(
-                    onItemTap: (location) {
-                      animatedMapController.animateTo(
-                        dest: location,
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.easeIn,
-                        zoom: 15,
+                  child: trashBoxData.when(
+                    data: (trashBoxData) {
+                      return ListView.builder(
+                        itemCount: wayPoints.value.length,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Container(
+                              height: 64,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "スタート",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.onSecondary,
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else if (wayPoints.value.length - 1 == index) {
+                            return Container(
+                              height: 64,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "ゴール",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.onSecondary,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 16),
+                            child: TimelineTile(
+                              indicatorStyle: IndicatorStyle(
+                                width: 12,
+                                indicator: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                ),
+                              ),
+                              beforeLineStyle: LineStyle(
+                                thickness: 4,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              alignment: TimelineAlign.start,
+                              endChild: Padding(
+                                padding: EdgeInsets.fromLTRB(4, 4, 0, 4),
+                                child: TrashboxStateListViewItem(
+                                  trashBox: wayPoints.value[index],
+                                  onTap: (location) {},
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () {},
-                    child: Text("回収ルートを生成"),
+                    error:
+                        (error, stackTrace) =>
+                            Center(child: Text("エラー：$error")),
+                    loading: () => Center(child: CircularProgressIndicator()),
                   ),
                 ),
                 SizedBox(height: 8),
-                SubmitTrashboxButton(),
+                if (routePoints.value.isNotEmpty) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        final String pointsStr = wayPoints.value
+                            .map((point) {
+                              return "${point.location.latitude},${point.location.longitude}";
+                            })
+                            .toList()
+                            .join("/");
+                        final String mapUrl =
+                            "https://www.google.co.jp/maps/dir/$pointsStr";
+
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text("ルートを共有"),
+                              content: Padding(
+                                padding: const EdgeInsets.all(32.0),
+                                child: SizedBox(
+                                  height: 300,
+                                  width: 300,
+                                  child: QrImageView(data: mapUrl),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("閉じる"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text("ルートをモバイルデバイスで表示"),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+                Slider(
+                  value: redemptionBorder.value,
+                  max: 1,
+                  min: 0,
+                  divisions: 10,
+                  label: "${(redemptionBorder.value * 100).toInt()}%",
+                  onChanged: (value) {
+                    redemptionBorder.value = value;
+                  },
+                ),
+                SizedBox(height: 8),
+                CreateRouteButton(
+                  onTap: () async {
+                    try {
+                      final fetchRoutePoints = await fetchRoute(
+                        wayPoints.value
+                            .map((trashBox) => trashBox.location)
+                            .toList(),
+                      );
+                      routePoints.value = fetchRoutePoints;
+                    } catch (e) {
+                      debugPrint("ルート取得エラー code:$e");
+                      routePoints.value = [];
+                    }
+                  },
+                ),
               ],
             ),
           ),
@@ -446,14 +616,3 @@ class _MapPageState extends ConsumerState<MapPage>
     );
   }
 }
-
-
-
-/*
-[
-            LatLng(34.98516766981969, 136.0143951288485),
-            LatLng(35.022126283391664, 135.96185499045154),
-            LatLng(35.00353500276053, 135.86487627013398),
-          ]
-
-*/
