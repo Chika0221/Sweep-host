@@ -16,6 +16,7 @@ class HostPlate extends HookConsumerWidget {
 
     return Container(
       height: 60 + 16 + 16,
+      width: 300,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
@@ -29,31 +30,50 @@ class HostPlate extends HookConsumerWidget {
               SizedBox(
                 height: 60,
                 width: 60,
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.transparent,
-                  child: ImageNetwork(
-                    image: data.photoURL,
-                    height: 60,
-                    width: 60,
-                    fitWeb: BoxFitWeb.contain,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.transparent,
+                    child:
+                        (data.photoURL != "")
+                            ? ImageNetwork(
+                              image: data.photoURL,
+                              height: 60,
+                              width: 60,
+                              fitWeb: BoxFitWeb.contain,
+                            )
+                            : Image.asset(
+                              "assets/images/avatar/avatar.png",
+                              height: 60,
+                              width: 60,
+                              fit: BoxFit.fill,
+                            ),
                   ),
                 ),
               ),
               const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    data.displayName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      data.displayName,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
-                  Text(
-                    data.hid,
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  Expanded(
+                    child: Text(
+                      data.hid,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),

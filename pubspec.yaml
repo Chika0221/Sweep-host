@@ -106,6 +106,7 @@ flutter:
     - assets/images/coin.png
     - assets/icons/sweep-hostIcon.png
     - assets/icons/icon_android_foreground.png
+    - assets/images/avatar/avatar.png
     # - assets/fonts
 
   fonts:

@@ -55,7 +55,7 @@ class _MapPageState extends ConsumerState<MapPage>
         .join(";");
 
     final String url =
-        "http://router.project-osrm.org/route/v1/driving/${points}?geometries=geojson";
+        "https://router.project-osrm.org/route/v1/driving/${points}?geometries=geojson";
 
     final response = await http.get(Uri.parse(url));
 
@@ -70,6 +70,8 @@ class _MapPageState extends ConsumerState<MapPage>
 
       return routePoints;
     } else {
+      print("コード:${response.statusCode}");
+      print("レスポンス:${response.body}");
       throw Exception(response.statusCode);
     }
   }
@@ -87,7 +89,7 @@ class _MapPageState extends ConsumerState<MapPage>
     final trashBoxData = ref.watch(trashBoxStreamProvider);
     final hostData = ref.watch(hostProvider);
 
-    final heatmapToggle = useState(false);
+    final isShowHeatMap = useState(false);
     final isOpenTrashBoxList = useState(false);
     final isOpenRoutePage = useState(false);
     final routePoints = useState<List<LatLng>>([]);
@@ -114,7 +116,19 @@ class _MapPageState extends ConsumerState<MapPage>
                         'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   ),
 
-                  if (!heatmapToggle.value) ...[
+                  if (routePoints.value.isNotEmpty &&
+                      isShowHeatMap.value == false)
+                    PolylineLayer(
+                      polylines: [
+                        Polyline(
+                          points: routePoints.value,
+                          strokeWidth: 8,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ],
+                    ),
+
+                  if (!isShowHeatMap.value) ...[
                     postData.when(
                       data: (data) {
                         return MarkerLayer(
@@ -159,7 +173,6 @@ class _MapPageState extends ConsumerState<MapPage>
                               return trashBox.weight >=
                                   (trashBox.maxWeight * redemptionBorder.value);
                             }).toList();
-
                         if (wayPoints.value.length > 1) {
                           final distance = Distance();
                           final sortedWaypoints = <TrashBox>[];
@@ -241,7 +254,7 @@ class _MapPageState extends ConsumerState<MapPage>
                   ),
 
                   // ヒートマップ
-                  if (heatmapToggle.value)
+                  if (isShowHeatMap.value)
                     postData.when(
                       data: (data) {
                         final heatMapData =
@@ -280,25 +293,14 @@ class _MapPageState extends ConsumerState<MapPage>
                     left: 8,
                     child: FloatingActionButton.extended(
                       onPressed: () {
-                        heatmapToggle.value = !heatmapToggle.value;
+                        isShowHeatMap.value = !isShowHeatMap.value;
                       },
                       label:
-                          (heatmapToggle.value)
+                          (isShowHeatMap.value)
                               ? Text("ゴミ箱マップ表示")
                               : Text("ヒートマップ表示"),
                     ),
                   ),
-
-                  if (routePoints.value.isNotEmpty)
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: routePoints.value,
-                          strokeWidth: 8,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ],
-                    ),
 
                   // サイドメニュー ボタンたち
                   Positioned(

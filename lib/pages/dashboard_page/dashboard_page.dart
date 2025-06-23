@@ -5,16 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Project imports:
-import 'package:sweep_host/pages/dashboard_page/activity_list_view.dart';
 import 'package:sweep_host/pages/dashboard_page/host_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/info_plate.dart';
 import 'package:sweep_host/pages/dashboard_page/post_data_chart.dart';
+
+part 'chat_list.dart';
 
 class DashboardPage extends HookConsumerWidget {
   const DashboardPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
+      mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
           child: Column(
@@ -38,12 +40,15 @@ class DashboardPage extends HookConsumerWidget {
           ),
         ),
         VerticalDivider(indent: 16, endIndent: 16),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [HostPlate(), ActivityListView()],
+        SizedBox(
+          width: 300 + 16 * 2,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: SizedBox(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [HostPlate(), Expanded(child: ChatList())],
+              ),
             ),
           ),
         ),
