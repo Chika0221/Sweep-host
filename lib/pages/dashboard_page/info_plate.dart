@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 // Project imports:
 import 'package:sweep_host/pages/dashboard_page/info_plate_item.dart';
 import 'package:sweep_host/states/discard_strasm_provider.dart';
-import 'package:sweep_host/states/get_discards_provider.dart';
 import 'package:sweep_host/states/post_stream_provider.dart';
 import 'package:sweep_host/states/trashbox_stream_provider.dart';
 import 'package:sweep_host/states/user_stream_provider.dart';

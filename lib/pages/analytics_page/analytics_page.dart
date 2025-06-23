@@ -16,10 +16,10 @@ import 'package:sweep_host/states/post_stream_provider.dart';
 import 'package:sweep_host/states/trashbox_stream_provider.dart';
 import 'package:sweep_host/states/user_stream_provider.dart';
 
-part 'user_count_info_card.dart';
+part 'discard_count_info_card.dart';
 part 'post_count_info_card.dart';
 part 'trashBox_count_info_card.dart';
-part 'discard_count_info_card.dart';
+part 'user_count_info_card.dart';
 
 class AnalyticsPage extends HookConsumerWidget {
   const AnalyticsPage({super.key});
