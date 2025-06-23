@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 // Project imports:
 import 'package:sweep_host/pages/dashboard_page/info_plate_item.dart';
+import 'package:sweep_host/states/discard_strasm_provider.dart';
 import 'package:sweep_host/states/get_discards_provider.dart';
 import 'package:sweep_host/states/post_stream_provider.dart';
 import 'package:sweep_host/states/trashbox_stream_provider.dart';
@@ -18,7 +19,7 @@ class InfoPlate extends HookConsumerWidget {
     final postStream = ref.watch(postStreamProvider);
     final userStream = ref.watch(userStreamProvider);
     final trashBoxStream = ref.watch(trashBoxStreamProvider);
-    final discardFuture = ref.watch(getDiscardsProvider);
+    final discardStream = ref.watch(discardStreamProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -93,7 +94,7 @@ class InfoPlate extends HookConsumerWidget {
                 },
                 loading: () => CircularProgressIndicator(),
               ),
-              discardFuture.when(
+              discardStream.when(
                 data: (discards) {
                   return InfoPlateItem(
                     icon: Icons.delete_forever_rounded,

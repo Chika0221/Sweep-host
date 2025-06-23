@@ -21,7 +21,7 @@ class AnalyticsInfoCard extends HookConsumerWidget {
   final String value;
   final IconData leadingIcon;
   final Color accentColor;
-  final void Function() onTap;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
