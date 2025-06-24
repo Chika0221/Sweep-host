@@ -291,14 +291,38 @@ class _MapPageState extends ConsumerState<MapPage>
                   Positioned(
                     bottom: 8,
                     left: 8,
-                    child: FloatingActionButton.extended(
-                      onPressed: () {
-                        isShowHeatMap.value = !isShowHeatMap.value;
-                      },
-                      label:
-                          (isShowHeatMap.value)
-                              ? Text("ゴミ箱マップ表示")
-                              : Text("ヒートマップ表示"),
+                    // child: FloatingActionButton.extended(
+                    //   onPressed: () {
+                    //     isShowHeatMap.value = !isShowHeatMap.value;
+                    //   },
+                    //   label:
+                    //       (isShowHeatMap.value)
+                    //           ? Text("ゴミ箱マップ表示")
+                    //           : Text("ヒートマップ表示"),
+                    // ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      child: SegmentedButton(
+                        selected: {isShowHeatMap.value},
+                        onSelectionChanged: (valueSet) {
+                          isShowHeatMap.value = valueSet.first;
+                        },
+                        segments: [
+                          ButtonSegment(
+                            value: false,
+                            label: Text("ゴミ箱マップ"),
+                            icon: Icon(Icons.map_rounded),
+                          ),
+                          ButtonSegment(
+                            value: true,
+                            label: Text("ヒートマップ"),
+                            icon: Icon(Icons.heat_pump_rounded),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
 

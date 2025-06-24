@@ -1,5 +1,17 @@
 part of 'dashboard_page.dart';
 
+const List<Map<String, dynamic>> chatstr = [
+  {"isHost": false, "text": "こんにちは。公園のゴミ箱から\nゴミが溢れてしまっています。"},
+  {"isHost": true, "text": "ご連絡ありがとうございます。\nご不便をおかけし\n申し訳ありません。"},
+  {"isHost": true, "text": "すぐに清掃員を向かわせます。\n場所はどのあたりでしょうか？"},
+  {"isHost": false, "text": "東口のトイレの隣\nにあるゴミ箱です。"},
+  {"isHost": true, "text": "承知いたしました。\n対応いたします。"},
+  {"isHost": null, "text": ""},
+  {"isHost": false, "text": "先程のゴミの件、\n対応いただけたでしょうか？"},
+  {"isHost": true, "text": "はい、先ほど清掃が\n完了いたしました。\nご協力ありがとうございました。"},
+  {"isHost": false, "text": "素早い対応、\nありがとうございました！"},
+];
+
 class ChatList extends HookConsumerWidget {
   const ChatList({super.key});
   @override
@@ -9,9 +21,16 @@ class ChatList extends HookConsumerWidget {
         SizedBox(height: 8),
         Expanded(
           child: ListView.separated(
-            itemCount: 100,
+            itemCount: chatstr.length,
             itemBuilder: (context, index) {
-              return TalkBubble(isHost: index % 2 == 0, text: index.toString());
+              if (chatstr[index]["isHost"] == null) {
+                return SizedBox(height: 16);
+              } else {
+                return TalkBubble(
+                  isHost: chatstr[index]["isHost"],
+                  text: chatstr[index]["text"],
+                );
+              }
             },
             separatorBuilder: (context, index) {
               return SizedBox(height: 4);
@@ -40,25 +59,37 @@ class TalkBubble extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Row(
+      mainAxisAlignment:
+          isHost ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        if (isHost) Spacer(),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.7,
+          ),
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
             color:
-                (isHost)
+                isHost
                     ? Theme.of(context).colorScheme.tertiaryContainer
                     : Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-              bottomRight: (isHost) ? Radius.zero : Radius.circular(8),
-              bottomLeft: (isHost) ? Radius.circular(8) : Radius.zero,
+              topLeft: const Radius.circular(16),
+              topRight: const Radius.circular(16),
+              bottomLeft: Radius.circular(isHost ? 16 : 0),
+              bottomRight: Radius.circular(isHost ? 0 : 16),
             ),
           ),
-          child: Text(text, style: Theme.of(context).textTheme.bodyLarge),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color:
+                  isHost
+                      ? Theme.of(context).colorScheme.onPrimaryContainer
+                      : Theme.of(context).colorScheme.onSecondaryContainer,
+            ),
+          ),
         ),
-        if (!isHost) Spacer(),
       ],
     );
   }
